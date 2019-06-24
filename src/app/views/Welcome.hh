@@ -2,25 +2,27 @@
 #define VITAMATERIALKIT_WELCOME_HH
 
 #include "../../kit/core/View.hh"
+#include "../../kit/utils/UtilsIME.hh"
 
 class Welcome: public View {
 private:
-    ZoneEvent buttonsTZE;
-    ZoneEvent i18nTZE;
-    ZoneEvent iconsTZE;
-    ZoneEvent textsTZE;
-    ZoneEvent checkboxesTZE;
-    ZoneEvent textfieldsTZE;
-    ZoneEvent cardsTZE;
-    ZoneEvent exitTZE;
+    UtilsIME *ime;
+
+    ZoneEvent confirmButtonZE;
+    ZoneEvent ipTextFieldZE, portTextFieldZE, usernameTextFieldZE, passwordTextFieldZE;
+    ZoneEventCheckboxes authentificationCheckboxZE;
+    std::string ip, username, password;
+    UiCheckboxesStatus checkboxesStatus;
+    int port;
 
 public:
     Welcome(const char *name);
     void contents() override;
     void controls() override;
-    int getXMenuItemPosition(int item);
 
     void beforeEnter() override;
+
+    void mounted() override;
 };
 
 #endif //VITAMATERIALKIT_WELCOME_HH

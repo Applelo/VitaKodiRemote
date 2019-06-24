@@ -13,7 +13,7 @@ if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
 endif ()
 
 
-set(SHORT_NAME VitaMaterialKit)
+set(SHORT_NAME VitaKodiRemote)
 set(PSVITAIP "192.168.0.192")
 
 project(${SHORT_NAME})
@@ -23,13 +23,13 @@ include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 ## Configuration options for this app
 # Display name (under bubble in LiveArea)
-set(VITA_APP_NAME "VitaMaterialKit")
+set(VITA_APP_NAME "VitaKodiRemote")
 # Unique ID must be exactly 9 characters. Recommended: XXXXYYYYY where X =
 # unique string of developer and Y = a unique number for this app
 
-set(VITA_TITLEID "MKIT00001")
+set(VITA_TITLEID "VKDR00001")
 # Optional version string to show in LiveArea's more info screen
-set(VITA_VERSION "00.70")
+set(VITA_VERSION "00.50")
 
 
 #Download and install externals dependencies only the first cmake load
@@ -180,6 +180,7 @@ set(MKIT_UTILS
         src/kit/utils/UtilsPad.cpp
         src/kit/utils/UtilsTouch.cpp
         src/kit/utils/UtilsPadTouchCtrl.cpp
+        src/kit/utils/UtilsScroll.cpp
         )
 
 ## Flags and includes for building
@@ -187,10 +188,6 @@ set(MKIT_UTILS
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fpermissive -std=gnu11 -Wall ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fpermissive -std=c++11 -Wall ")
-
-include_directories(
-        ../common
-)
 
 add_executable(${SHORT_NAME}
         src/main.cpp
@@ -200,15 +197,10 @@ add_executable(${SHORT_NAME}
         ${MKIT_UI}
         ${MKIT_UTILS}
 
+        src/app/utils/Config.cpp
+        src/app/utils/Request.cpp
+
         src/app/views/Welcome.cpp
-        src/app/views/I18nSample.cpp
-        src/app/views/ButtonsSample.cpp
-        src/app/views/IconsSample.cpp
-        src/app/views/TextsSample.cpp
-        src/app/views/CheckboxesSample.cpp
-        src/app/views/TextFieldsSample.cpp
-        src/app/views/CardsSample.cpp
-        src/kit/utils/UtilsScroll.cpp
         )
 
 
@@ -224,6 +216,8 @@ target_link_libraries(${SHORT_NAME}
         SceCommonDialog_stub
         SceAppUtil_stub
         SceRegistryMgr_stub
+        SceNet_stub
+        sceNetCtl_stub
         jansson
         freetype
         png
