@@ -1,4 +1,4 @@
-# VitaKodiRemote [![Build Status](https://travis-ci.org/Applelo/VitaMaterialKit.svg?branch=master)](https://travis-ci.org/Applelo/VitaMaterialKit)
+# VitaKodiRemote [![Build Status](https://travis-ci.org/Applelo/VitaKodiRemote.svg?branch=master)](https://travis-ci.org/Applelo/VitaKodiRemote)
 
 Use your PSVita like a remote for your Kodi system !
 

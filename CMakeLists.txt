@@ -186,8 +186,42 @@ set(MKIT_UTILS
 ## Flags and includes for building
 # Note that we make sure not to overwrite previous flags
 
+set(ENV{PKG_CONFIG_PATH} "$ENV{VITASDK}/arm-vita-eabi/lib/pkgconfig")
+include(FindPkgConfig)
+
+find_package(Git)
+if(NOT Git_FOUND)
+    message(WARNING "Git not found, using unknown as tag...")
+    add_definitions(-DGIT_COMMIT="unknown")
+else()
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+            OUTPUT_VARIABLE DGIT_COMMIT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+    )
+
+    add_definitions(-DGIT_COMMIT="${DGIT_COMMIT}")
+endif()
+
+# Flags and includes
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fpermissive -std=gnu11 -Wall ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fpermissive -std=c++11 -Wall ")
+set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
+set(VITA_MAKE_FSELF_FLAGS "${VITA_MAKE_FSELF_FLAGS} -a 0x2800000000000001")
+
+find_package(CURL REQUIRED)
+find_package(OpenSSL REQUIRED)
+pkg_check_modules(CURLPP REQUIRED curlpp)
+
+include_directories(
+        src/
+)
+
+link_directories(
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 add_executable(${SHORT_NAME}
         src/main.cpp
@@ -210,14 +244,13 @@ target_link_libraries(${SHORT_NAME}
         SceDisplay_stub
         SceGxm_stub
         ScePvf_stub
-        SceSysmodule_stub
         SceCtrl_stub
         SceTouch_stub
         SceCommonDialog_stub
         SceAppUtil_stub
+        SceAppMgr_stub
         SceRegistryMgr_stub
-        SceNet_stub
-        sceNetCtl_stub
+        SceSysmodule_stub
         jansson
         freetype
         png
@@ -225,6 +258,13 @@ target_link_libraries(${SHORT_NAME}
         z
         m
         c
+        SceNet_stub
+        SceNetCtl_stub
+        SceHttp_stub
+        SceSsl_stub
+        ${CURLPP_LDFLAGS}
+        ${CURL_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
         )
 
 
