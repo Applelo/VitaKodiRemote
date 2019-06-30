@@ -7,6 +7,7 @@
 #include "../kit/utils/UtilsPadTouchCtrl.hh"
 #include "../kit/utils/UtilsScroll.hh"
 #include "utils/Config.hh"
+#include "utils/Request.hh"
 
 class Utils {
 protected:
@@ -18,6 +19,7 @@ public:
     UtilsPadTouchCtrl *PTC;
     UtilsScroll *scroll;
     Config *config;
+    Request *request;
 
     Utils();
     virtual void read();

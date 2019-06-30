@@ -183,28 +183,6 @@ set(MKIT_UTILS
         src/kit/utils/UtilsScroll.cpp
         )
 
-## Flags and includes for building
-# Note that we make sure not to overwrite previous flags
-
-set(ENV{PKG_CONFIG_PATH} "$ENV{VITASDK}/arm-vita-eabi/lib/pkgconfig")
-include(FindPkgConfig)
-
-find_package(Git)
-if(NOT Git_FOUND)
-    message(WARNING "Git not found, using unknown as tag...")
-    add_definitions(-DGIT_COMMIT="unknown")
-else()
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-            OUTPUT_VARIABLE DGIT_COMMIT
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET
-    )
-
-    add_definitions(-DGIT_COMMIT="${DGIT_COMMIT}")
-endif()
-
 # Flags and includes
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fpermissive -std=gnu11 -Wall ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fpermissive -std=c++11 -Wall ")
@@ -234,7 +212,7 @@ add_executable(${SHORT_NAME}
         src/app/utils/Config.cpp
         src/app/utils/Request.cpp
 
-        src/app/views/Welcome.cpp
+        src/app/views/Settings.cpp
         )
 
 
@@ -282,7 +260,7 @@ add_custom_target(send
         )
 
 add_custom_target(copy
-        COMMAND cp eboot.bin F:/app/${VITA_TITLEID}/eboot.bin
+        COMMAND cp eboot.bin /Volumes/Untitled/app/${VITA_TITLEID}/eboot.bin
         DEPENDS eboot.bin
         )
 
@@ -292,7 +270,7 @@ add_custom_target(send_vpk
         )
 
 add_custom_target(copy_vpk
-        COMMAND cp ${SHORT_NAME}.vpk F:/data/${VITA_TITLEID}/${SHORT_NAME}.vpk
+        COMMAND cp ${SHORT_NAME}.vpk F:/data/${SHORT_NAME}.vpk
         DEPENDS ${SHORT_NAME}.vpk
         )
 

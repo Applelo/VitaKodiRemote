@@ -4,7 +4,7 @@
 #include "../../kit/core/View.hh"
 #include "../../kit/utils/UtilsIME.hh"
 
-class Welcome: public View {
+class Settings: public View {
 private:
     UtilsIME *ime;
 
@@ -14,9 +14,10 @@ private:
     std::string ip, username, password;
     UiCheckboxesStatus checkboxesStatus;
     int port;
+    bool tryConnection = false;
 
 public:
-    Welcome(const char *name);
+    Settings(const char *name);
     void contents() override;
     void controls() override;
 

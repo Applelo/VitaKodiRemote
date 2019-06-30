@@ -11,6 +11,7 @@ void Utils::init() {
    this->scroll = new UtilsScroll(this->touch);
    this->PTC = new UtilsPadTouchCtrl(this->pad, this->touch, this->scroll);
    this->config = new Config();
+   this->request = new Request(this->config);
 }
 
 void Utils::read() {

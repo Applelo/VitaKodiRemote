@@ -1,12 +1,12 @@
-#include "Welcome.hh"
+#include "Settings.hh"
 
 
 
-Welcome::Welcome(const char *name) : View(name) {
+Settings::Settings(const char *name) : View(name) {
 
 }
 
-void Welcome::contents() {
+void Settings::contents() {
 
     ipTextFieldZE = ui->textFields->filledDrawLeadingIcon(SCREEN_HALF_WIDTH - (TEXTFIELD_DEFAULT_WIDTH / 2), 10, TEXTFIELD_MODE_SINGLE, utils->PTC->isY(PADTOUCHCTRL_IS_FIRST), "Adresse IP", ICON_MDI_IP_NETWORK, ip);
     portTextFieldZE = ui->textFields->filledDrawLeadingIcon(SCREEN_HALF_WIDTH - (TEXTFIELD_DEFAULT_WIDTH / 2), 20 + ipTextFieldZE.y + ipTextFieldZE.height, TEXTFIELD_MODE_SINGLE, utils->PTC->isY(2), "Port", ICON_MDI_SERIAL_PORT, std::to_string(port));
@@ -21,10 +21,13 @@ void Welcome::contents() {
         confirmButtonZE = ui->buttons->containedDraw("Valider", SCREEN_HALF_WIDTH - (confirmButtonZE.width / 2), 30 + authentificationCheckboxZE.y + authentificationCheckboxZE.height, THEME_PRIMARY, utils->PTC->isY(PADTOUCHCTRL_IS_LAST), ICON_MDI_CHECK);
     }
 
-
+    if (tryConnection)
+        ui->texts->draw(0, 0, Body1, "LOL");
+    else
+        ui->texts->draw(0, 0, Body1, "Sad");
 }
 
-void Welcome::controls() {
+void Settings::controls() {
 
     //events
 
@@ -39,11 +42,11 @@ void Welcome::controls() {
     if (checkboxesStatus == CHECKBOX_CHECKED) {
         if (ui->textFields->onTouch(usernameTextFieldZE, utils->touch->lastClickPoint) ||
             ui->textFields->onPad(usernameTextFieldZE, utils->pad->pressed.cross)) {
-            ip = ime->getUserText("Utilisateur", username.c_str());
+            username = ime->getUserText("Utilisateur", username.c_str());
         }
         if (ui->textFields->onTouch(passwordTextFieldZE, utils->touch->lastClickPoint) ||
             ui->textFields->onPad(passwordTextFieldZE, utils->pad->pressed.cross)) {
-            ip = ime->getUserText("Mot de passe", ip.c_str());
+            password = ime->getUserText("Mot de passe", password.c_str());
         }
     }
 
@@ -56,30 +59,32 @@ void Welcome::controls() {
 
     if (ui->buttons->onTouch(confirmButtonZE, utils->touch->lastClickPoint) ||
         ui->buttons->onPad(confirmButtonZE, utils->pad->pressed.cross)) {
-
+        utils->config->setConnection(ip, port, checkboxesStatus == CHECKBOX_CHECKED, username, password);
+        utils->config->save();
+        //tryConnection = utils->request->tryConnection();
     }
-
 
 
     if (checkboxesStatus == CHECKBOX_CHECKED) {
         this->utils->PTC->setLimit(1, 6);
     }
     else {
-        username = "";
-        password = "";
         this->utils->PTC->setLimit(1, 4);
     }
 
 
 }
 
-void Welcome::beforeEnter() {
-    this->checkboxesStatus =  CHECKBOX_CHECKED;
+void Settings::beforeEnter() {
+    ip = utils->config->getIp();
+    port = utils->config->getPort();
+    checkboxesStatus = utils->config->isAuthentication() ? CHECKBOX_CHECKED : CHECKBOX_UNCHECKED;
+    username = utils->config->getUsername();
+    password = utils->config->getPassword();
 }
 
-void Welcome::mounted() {
+void Settings::mounted() {
     ime = new UtilsIME();
-    ip = utils->config->getIp();
 }
 
 

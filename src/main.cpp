@@ -1,14 +1,14 @@
 #include <psp2/kernel/processmgr.h>
 #include "kit/core/App.hh"
-#include "app/views/Welcome.hh"
+#include "app/views/Settings.hh"
 
 int main() {
 
-    auto *welcome = new Welcome("Welcome");
+    auto *settings = new Settings("Settings");
 
-    auto *app = new App("Welcome");
+    auto *app = new App("Settings");
 
-    app->insertView(welcome);
+    app->insertView(settings);
 
 
     app->main();
