@@ -31,21 +31,21 @@ void Settings::controls() {
 
     //events
 
-    if (ui->textFields->onTouch(ipTextFieldZE, utils->touch->lastClickPoint) ||
-        ui->textFields->onPad(ipTextFieldZE, utils->pad->pressed.cross)) {
+    if (EventUi::onTouch(ipTextFieldZE, utils->touch->lastClickPoint) ||
+            EventUi::onPad(ipTextFieldZE, utils->pad->pressed.cross)) {
         ip = ime->getUserText("IP", ip.c_str(), SCE_IME_TYPE_EXTENDED_NUMBER);
     }
-    if (ui->textFields->onTouch(portTextFieldZE, utils->touch->lastClickPoint) ||
-        ui->textFields->onPad(portTextFieldZE, utils->pad->pressed.cross)) {
+    if (EventUi::onTouch(portTextFieldZE, utils->touch->lastClickPoint) ||
+            EventUi::onPad(portTextFieldZE, utils->pad->pressed.cross)) {
         port = std::stoi(ime->getUserText("Port", std::to_string(port).c_str(), SCE_IME_TYPE_NUMBER));
     }
     if (checkboxesStatus == CHECKBOX_CHECKED) {
-        if (ui->textFields->onTouch(usernameTextFieldZE, utils->touch->lastClickPoint) ||
-            ui->textFields->onPad(usernameTextFieldZE, utils->pad->pressed.cross)) {
+        if (EventUi::onTouch(usernameTextFieldZE, utils->touch->lastClickPoint) ||
+                EventUi::onPad(usernameTextFieldZE, utils->pad->pressed.cross)) {
             username = ime->getUserText("Utilisateur", username.c_str());
         }
-        if (ui->textFields->onTouch(passwordTextFieldZE, utils->touch->lastClickPoint) ||
-            ui->textFields->onPad(passwordTextFieldZE, utils->pad->pressed.cross)) {
+        if (EventUi::onTouch(passwordTextFieldZE, utils->touch->lastClickPoint) ||
+                EventUi::onPad(passwordTextFieldZE, utils->pad->pressed.cross)) {
             password = ime->getUserText("Mot de passe", password.c_str());
         }
     }
@@ -57,8 +57,8 @@ void Settings::controls() {
         checkboxesStatus = ui->checkboxes->onPadAuto(authentificationCheckboxZE, utils->pad->pressed.cross);
     }
 
-    if (ui->buttons->onTouch(confirmButtonZE, utils->touch->lastClickPoint) ||
-        ui->buttons->onPad(confirmButtonZE, utils->pad->pressed.cross)) {
+    if (EventUi::onTouch(confirmButtonZE, utils->touch->lastClickPoint) ||
+            EventUi::onPad(confirmButtonZE, utils->pad->pressed.cross)) {
         utils->config->setConnection(ip, port, checkboxesStatus == CHECKBOX_CHECKED, username, password);
         utils->config->save();
         //tryConnection = utils->request->tryConnection();

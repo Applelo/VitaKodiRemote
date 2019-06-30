@@ -9,14 +9,20 @@
 #include "ViewsController.hh"
 #include "../../app/Ui.hh"
 #include "../../app/Utils.hh"
-#include "Config.hh"
 
+#if DEBUG_APP
+    #include <debugnet.h>
+#else
+    #define debugNetInit(...)
+    #define debugNetPrintf(...)
+    #define debugNetFinish()
+#endif
 
 class App {
 private:
     void checkExit();
     void initVita2d();
-    void launchMountedViews();
+    void mountViews();
 
 protected:
     Utils *utils;
@@ -26,6 +32,8 @@ protected:
     int run;
     std::string oldViewName;
 
+    //hook can be override
+    virtual void beforeMountViews();
     virtual void beforeView();
     virtual void afterView();
     virtual void debug();
