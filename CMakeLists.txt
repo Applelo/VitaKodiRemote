@@ -17,6 +17,9 @@ include(cmake/Vita3K.cmake)
 include(cmake/Files.cmake)
 include(cmake/VitaMaterialKit.cmake)
 
+set(ENV{PKG_CONFIG_PATH} "$ENV{VITASDK}/arm-vita-eabi/lib/pkgconfig")
+include(FindPkgConfig)
+
 find_package(Git)
 if (NOT Git_FOUND)
     message(WARNING "Git not found, using unknown as tag...")
